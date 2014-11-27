@@ -2,6 +2,17 @@
 # Status script for wmfs
 # based on https://bbs.archlinux.org/viewtopic.php?pid=872150#p872150
 
+ttyport="/dev/ttyUSB0"
+echo "initializing $ttyport"
+#initialize port
+stty -F $ttyport 9600 cs8 -cstopb
+exec 3<>$ttyport
+echo "beginning to send data"
+while :
+do
+
+sleep 1
+
     # Collect system information 
     MEM=$(awk '/Mem/ {print $3}' <(free -m))
     # CPU line courtesy Procyon: https://bbs.archlinux.org/viewtopic.php?pid=661592
@@ -17,5 +28,11 @@
 # write to Serial
 echo $CPU $RAM $NET
 ARDCPU="$(($CPU*2+60)),0,0"
-echo $ARDCPU > /dev/ttyUSB0
+echo  $ARDCPU >&3
 echo $ARDCPU
+#head -n 1 $ttyport
+
+done
+
+# close port
+exec 3>&-
