@@ -27,20 +27,44 @@ void loop() {
 // some info on PWM here: http://www.uchobby.com/index.php/2008/02/12/arduino-analog-gauge/
 // need to add resistors
  if (Serial.available() > 0) {
-//    char value = Serial.read();
-    int value = Serial.parseInt();
-    if (value > 1) {
-      if (value < 256) {
-        analogWrite(11, value); 
+// parsing values http://arduino.cc/en/Tutorial/ReadASCIIString
+// we expect a string like 123,123,123\n on the console:
+// echo "123,123,123" > /dev/ttyUSB0
+    int cpu = Serial.parseInt();
+    int ram = Serial.parseInt();    
+    int net = Serial.parseInt(); 
+    if (Serial.read() == '\n') {
+      
+      if (cpu > 0) {
+        if (cpu < 256) {
+          analogWrite(11, cpu); 
+        }
       }
-    }
-/*    if (value == '1') {
-      digitalWrite(ledPin, HIGH);
-    } else {
-      digitalWrite(ledPin, LOW);
-    } */
-    Serial.println(value);
-  }
+      if (ram > 0) {
+        if (ram < 256) {
+          analogWrite(10, ram); 
+        }
+      }
+      if (net > 0) {
+        if (net < 256) {
+          analogWrite(9, net); 
+        }
+      }
+      String gauge_name = " CPU:";
+      String gauge_value = String(cpu);
+      String printed_line = gauge_name + gauge_value;
+      Serial.print(printed_line);
+      gauge_name = " RAM:";
+      gauge_value = String(ram);
+      printed_line = gauge_name + gauge_value;
+      Serial.print(printed_line);
+      gauge_name = " NET:";
+      gauge_value = String(net);
+      printed_line = gauge_name + gauge_value;
+      Serial.println(printed_line);
 
+
+    }
+ }
 }
 
