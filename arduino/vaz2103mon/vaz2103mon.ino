@@ -1,10 +1,8 @@
 /*
-  Blink
-  Turns on an LED on for one second, then off for one second, repeatedly.
- 
-  This example code is in the public domain.
+  vaz2103mon - displays CPU stats on a VAZ 2103 instrument panel
+  
+  This code is in the public domain.
  */
-int ledPin = 13;
 
 void setup() {                
   // initialize the digital pin as an output.
@@ -23,7 +21,6 @@ void setup() {
 
 void loop() {
 
-// this part is from http://www.suffix.be/blog/send-data-to-arduino
 // some info on PWM here: http://www.uchobby.com/index.php/2008/02/12/arduino-analog-gauge/
 // need to add resistors
  if (Serial.available() > 0) {
