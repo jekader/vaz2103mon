@@ -2,7 +2,7 @@
 # Status script for wmfs
 # based on https://bbs.archlinux.org/viewtopic.php?pid=872150#p872150
 
-ttyport="/dev/ttyUSB0"
+ttyport="/dev/ttyUSB1"
 echo "initializing $ttyport"
 #initialize port
 stty -F $ttyport 9600 cs8 -cstopb
@@ -26,11 +26,12 @@ sleep 1
     DTE=$(date "+%I:%M")
 
 # write to Serial
-echo $CPU $RAM $NET
+echo "RAW:" $CPU $RAM $NET
 ARDCPU="$(($CPU*2+60)),0,0"
 echo  $ARDCPU >&3
-echo $ARDCPU
-#head -n 1 $ttyport
+echo "SND:" $ARDCPU
+echo -n "RCV:"
+head -n 1 $ttyport
 
 done
 
