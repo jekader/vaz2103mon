@@ -32,17 +32,17 @@ void loop() {
     int net = Serial.parseInt(); 
     if (Serial.read() == '\n') {
       
-      if (cpu > 0) {
+      if (cpu >= 0) {
         if (cpu < 256) {
           analogWrite(11, cpu); 
         }
       }
-      if (ram > 0) {
+      if (ram >= 0) {
         if (ram < 256) {
           analogWrite(10, ram); 
         }
       }
-      if (net > 0) {
+      if (net >= 0) {
         if (net < 256) {
           analogWrite(9, net); 
         }
