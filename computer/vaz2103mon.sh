@@ -3,6 +3,17 @@
 # based on https://bbs.archlinux.org/viewtopic.php?pid=872150#p872150
 
 ttyport="/dev/ttyUSB1"
+
+# define ranges for PWM
+CPUMIN=100
+CPUMAX=0
+RAMMIN=100
+RAMMAX=0
+
+# define conversion factor
+CPUf=$((($CPUMAX-$CPUMIN)/100))
+RAMf=$((($RAMMAX-$RAMMIN)/100))
+
 echo "initializing $ttyport"
 #initialize port
 stty -F $ttyport 9600 cs8 -cstopb
@@ -27,7 +38,9 @@ sleep 1
 
 # write to Serial
 echo "RAW:" $CPU $RAM $NET
-ARDCPU="$(($CPU*2+60)),0,0"
+CPUzi=$(($CPUMIN+$CPU*$CPUf))
+CPUz=$(  echo $CPUzi | awk '{print int($1)}' ) 
+ARDCPU="$CPUz,0,0"
 echo  $ARDCPU >&3
 echo "SND:" $ARDCPU
 echo -n "RCV:"
