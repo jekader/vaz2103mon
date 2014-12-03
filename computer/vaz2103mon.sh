@@ -9,6 +9,8 @@ CPUMIN=100
 CPUMAX=0
 RAMMIN=85
 RAMMAX=0
+NETMIN=100
+NETMAX=0
 
 # define conversion factor
 #CPUf=$((($CPUMAX-$CPUMIN)/100))
@@ -19,7 +21,31 @@ echo "initializing $ttyport"
 #initialize port
 stty -F $ttyport 9600 cs8 -cstopb
 exec 3<>$ttyport
-echo "beginning to send data"
+
+####### test patterns
+
+Cycles=3
+echo "sending 0-100-0 patterns $Cycles times"
+for Count in $(seq 1 $Cycles);
+do
+
+echo -n "$Count."
+# all zeroes
+ARDCPU="$CPUMIN,$RAMMIN,$NETMIN"
+echo  $ARDCPU >&3
+sleep 2
+
+echo -n "."
+# all 100%
+ARDCPU="$CPUMAX,$RAMMAX,$NETMAX"
+echo  $ARDCPU >&3
+sleep 2
+
+done
+echo "done"
+############## end tests
+
+echo "sending actual data"
 while :
 do
 
