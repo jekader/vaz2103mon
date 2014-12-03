@@ -7,13 +7,14 @@ ttyport="/dev/ttyUSB1"
 # define ranges for PWM
 CPUMIN=100
 CPUMAX=0
-RAMMIN=100
+RAMMIN=85
 RAMMAX=0
 
 # define conversion factor
-CPUf=$((($CPUMAX-$CPUMIN)/100))
-RAMf=$((($RAMMAX-$RAMMIN)/100))
-
+#CPUf=$((($CPUMAX-$CPUMIN)/100))
+CPUf=$( echo "scale=1; ($CPUMAX-$CPUMIN)/100" | bc)
+RAMf=$( echo "scale=1; ($RAMMAX-$RAMMIN)/100" | bc)
+echo "constants:  $CPUf $RAMf "
 echo "initializing $ttyport"
 #initialize port
 stty -F $ttyport 9600 cs8 -cstopb
@@ -25,7 +26,7 @@ do
 sleep 1
 
     # Collect system information 
-    MEM=$(awk '/Mem/ {print $3}' <(free -m))
+    RAM=$(awk '/Mem/ {print int(($3-$6-$7)*100/$2)}' <(free -m))
     # CPU line courtesy Procyon: https://bbs.archlinux.org/viewtopic.php?pid=661592
     CPU=$(eval $(awk '/^cpu /{print "previdle=" $5 "; prevtotal=" $2+$3+$4+$5 }' /proc/stat); sleep 0.4; 
          eval $(awk '/^cpu /{print "idle=" $5 "; total=" $2+$3+$4+$5 }' /proc/stat); 
@@ -38,9 +39,11 @@ sleep 1
 
 # write to Serial
 echo "RAW:" $CPU $RAM $NET
-CPUzi=$(($CPUMIN+$CPU*$CPUf))
-CPUz=$(  echo $CPUzi | awk '{print int($1)}' ) 
-ARDCPU="$CPUz,0,0"
+CPUzi=$(echo "$CPUMIN+$CPU*$CPUf"|bc)
+CPUz=$(  echo $CPUzi | awk '{print int($1)}' )
+RAMzi=$(echo "$RAMMIN+$RAM*$RAMf"|bc)
+RAMz=$(  echo $RAMzi | awk '{print int($1)}' )
+ARDCPU="$CPUz,$RAMz,0"
 echo  $ARDCPU >&3
 echo "SND:" $ARDCPU
 echo -n "RCV:"
