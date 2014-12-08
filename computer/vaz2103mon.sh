@@ -75,7 +75,7 @@ diffbytes=$( echo "$newbytes-$oldbytes" | bc)
 # converting to mbps
 diffmegabits=$( echo "$diffbytes*8/(1024*1024)" | bc)
 NET=$( echo "$diffmegabits*100/$net_max_downlink_mbps" | bc)
-if [ "$NET" -gt "100" ] then
+if [ "$NET" -gt "100" ]; then
 NET=100
 fi
 #echo "net debug: $newbytes - $oldbytes = $diffbytes bytes > $diffmegabits mbps > $NET %"
