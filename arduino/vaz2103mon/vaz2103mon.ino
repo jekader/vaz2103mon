@@ -5,13 +5,13 @@
  */
 
 // driving cd-rom stepper, based on
-// http://electronics-diy.com/driving-cdrom-stepper-motor-with-arduino.php
+// http://www.edaboard.com/thread217270.html
 
 int coila1 = 2; 
 int coila2 = 4; 
 int coilb1 = 7; 
 int coilb2 = 8;
-int mdelay = 50;
+int mdelay = 10;
 
 void setup() {                
   // initialize the digital pin as an output.
@@ -36,39 +36,11 @@ void setup() {
 void loop() {
 
   
-// stepper experiments. Commented out for now
-//for (int i=0; i <= 255; i++){
+// stepper experiments.
+// int stp;
+// stp = stepperMove(1,20);
+// stp = stepperMove(-1,20);
 
-//digitalWrite(coila1, HIGH); 
-//digitalWrite(coila2, LOW); 
-//digitalWrite(coilb1, LOW); 
-//digitalWrite(coilb2, LOW); 
-//delay(mdelay); 
-
-//digitalWrite(coila1, LOW); 
-//digitalWrite(coila2, LOW); 
-//digitalWrite(coilb1, HIGH); 
-//digitalWrite(coilb2, LOW); 
-//delay(mdelay); 
-
-//digitalWrite(coila1, LOW); 
-//digitalWrite(coila2, HIGH); 
-//digitalWrite(coilb1, LOW); 
-//digitalWrite(coilb2, LOW); 
-//delay(mdelay); 
-
-//digitalWrite(coila1, LOW); 
-//digitalWrite(coila2, LOW); 
-//digitalWrite(coilb1, LOW); 
-//digitalWrite(coilb2, HIGH); 
-//delay(mdelay); 
-//}
-
-//digitalWrite(coila1, LOW); 
-//digitalWrite(coila2, LOW); 
-//digitalWrite(coilb1, LOW); 
-//digitalWrite(coilb2, LOW); 
-  
 // some info on PWM here: http://www.uchobby.com/index.php/2008/02/12/arduino-analog-gauge/
 // need to add resistors
  if (Serial.available() > 0) {
@@ -112,5 +84,65 @@ void loop() {
 
     }
  }
+}
+
+
+// simple stepper function
+int stepperMove(int rotation, int steps){
+
+  for (int i=0; i <= steps; i++){
+    if ( rotation==1){
+      digitalWrite(coila1, HIGH); 
+      digitalWrite(coila2, LOW); 
+      digitalWrite(coilb1, HIGH); 
+      digitalWrite(coilb2, LOW); 
+      delay(mdelay); 
+
+      digitalWrite(coila1, HIGH); 
+      digitalWrite(coila2, LOW); 
+      digitalWrite(coilb1, LOW); 
+      digitalWrite(coilb2, HIGH); 
+      delay(mdelay); 
+
+      digitalWrite(coila1, LOW); 
+      digitalWrite(coila2, HIGH); 
+      digitalWrite(coilb1, LOW); 
+      digitalWrite(coilb2, HIGH); 
+      delay(mdelay); 
+
+      digitalWrite(coila1, LOW); 
+      digitalWrite(coila2, HIGH); 
+      digitalWrite(coilb1, HIGH); 
+      digitalWrite(coilb2, LOW); 
+      delay(mdelay);
+     }
+    else
+     {
+      digitalWrite(coila1, LOW); 
+      digitalWrite(coila2, HIGH); 
+      digitalWrite(coilb1, HIGH); 
+      digitalWrite(coilb2, LOW); 
+      delay(mdelay);
+
+      digitalWrite(coila1, LOW); 
+      digitalWrite(coila2, HIGH); 
+      digitalWrite(coilb1, LOW); 
+      digitalWrite(coilb2, HIGH); 
+      delay(mdelay);   
+
+      digitalWrite(coila1, HIGH); 
+      digitalWrite(coila2, LOW); 
+      digitalWrite(coilb1, LOW); 
+      digitalWrite(coilb2, HIGH); 
+      delay(mdelay); 
+
+      digitalWrite(coila1, HIGH); 
+      digitalWrite(coila2, LOW); 
+      digitalWrite(coilb1, HIGH); 
+      digitalWrite(coilb2, LOW); 
+      delay(mdelay);
+     }
+  }
+  return 0;
 }
 
