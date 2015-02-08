@@ -15,7 +15,7 @@ int coila2 = 4;
 int coilb1 = 3; 
 int coilb2 = 5;
 // delay between steps
-int mdelay = 10;
+int mdelay = 6;
 
 // define PWM pins for remaining gauges
 int rampin = 9;
